@@ -1,0 +1,42 @@
+[
+  {
+    "id": "tee-noir-001",
+    "name": "T-Shirt Oversize — Noir",
+    "slug": "tee-noir",
+    "price": 199,
+    "currency": "MAD",
+    "description": "T-shirt oversize en coton premium 100%. Coupe ample, tombé structuré. Noir profond, finition mate. Un essentiel du quotidien revisité.",
+    "details": [
+      "100% Coton Premium — 220gsm",
+      "Coupe Oversize",
+      "Col rond renforcé",
+      "Coutures plates",
+      "Fabriqué au Maroc"
+    ],
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "colors": ["Noir"],
+    "images": ["images/products/tee-black-1.jpg"],
+    "featured": true,
+    "inStock": true
+  },
+  {
+    "id": "tee-blanc-001",
+    "name": "T-Shirt Oversize — Blanc",
+    "slug": "tee-blanc",
+    "price": 199,
+    "currency": "MAD",
+    "description": "T-shirt oversize en coton premium 100%. Coupe ample, tombé structuré. Blanc cassé, finition mate. Un essentiel du quotidien revisité.",
+    "details": [
+      "100% Coton Premium — 220gsm",
+      "Coupe Oversize",
+      "Col rond renforcé",
+      "Coutures plates",
+      "Fabriqué au Maroc"
+    ],
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "colors": ["Blanc"],
+    "images": ["images/products/tee-white-1.png"],
+    "featured": true,
+    "inStock": true
+  }
+]

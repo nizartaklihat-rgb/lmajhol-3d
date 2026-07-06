@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMAJHOL — Oversized Essentials</title>
+  <meta name="description" content="LMAJHOL — T-shirts oversize premium. Noir & Blanc. Fabriqué au Maroc.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@200;300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- LOADING SCREEN -->
+  <div id="loader" class="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">LMAJHOL</div>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+      <div class="loader-text">Chargement...</div>
+    </div>
+  </div>
+
+  <!-- 3D CANVAS -->
+  <canvas id="scene3d"></canvas>
+
+  <!-- NAVIGATION -->
+  <nav id="nav" class="nav">
+    <a href="#" class="nav-logo" id="navLogo">LMAJHOL</a>
+    <div class="nav-links">
+      <a href="#collection" class="nav-link">Collection</a>
+      <a href="#about" class="nav-link">À Propos</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Menu">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#collection" class="mobile-link">Collection</a>
+    <a href="#about" class="mobile-link">À Propos</a>
+    <a href="#contact" class="mobile-link">Contact</a>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section id="hero" class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">EST. 2025 — CASABLANCA</div>
+      <h1 class="hero-title">
+        <span class="hero-line">LMAJHOL</span>
+      </h1>
+      <p class="hero-sub">Oversized Essentials. Noir & Blanc.</p>
+      <a href="#collection" class="hero-cta">
+        <span>Découvrir</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+      </a>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>NOIR & BLANC&nbsp;&nbsp;✦&nbsp;&nbsp;OVERSIZE&nbsp;&nbsp;✦&nbsp;&nbsp;PREMIUM COTON&nbsp;&nbsp;✦&nbsp;&nbsp;FABRIQUÉ AU MAROC&nbsp;&nbsp;✦&nbsp;&nbsp;LMAJHOL&nbsp;&nbsp;✦&nbsp;&nbsp;</span>
+      <span>NOIR & BLANC&nbsp;&nbsp;✦&nbsp;&nbsp;OVERSIZE&nbsp;&nbsp;✦&nbsp;&nbsp;PREMIUM COTON&nbsp;&nbsp;✦&nbsp;&nbsp;FABRIQUÉ AU MAROC&nbsp;&nbsp;✦&nbsp;&nbsp;LMAJHOL&nbsp;&nbsp;✦&nbsp;&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- COLLECTION SECTION -->
+  <section id="collection" class="section collection">
+    <div class="section-header">
+      <span class="section-label">COLLECTION</span>
+      <h2 class="section-title">Première Drop</h2>
+      <p class="section-desc">Deux pièces essentielles. Noir & Blanc. Oversize premium en coton 220gsm.</p>
+    </div>
+    <div class="products-grid" id="productsGrid">
+      <!-- Products loaded via JS -->
+    </div>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section id="about" class="section about">
+    <div class="about-inner">
+      <div class="about-text">
+        <span class="section-label">À PROPOS</span>
+        <h2 class="about-title">Le Noir.<br>Le Blanc.<br>L'Essentiel.</h2>
+        <p class="about-desc">
+          LMAJHOL nait à Casablanca avec une vision simple : des pièces oversize 
+          premium, sans compromis. Chaque t-shirt est conçu en coton 220gsm, 
+          avec une coupe ample et des finitions soignées. Pas de logo visible. 
+          Pas de bruit. Juste le vêtement, dans sa forme la plus pure.
+        </p>
+        <div class="about-stats">
+          <div class="stat"><span class="stat-num">220</span><span class="stat-label">gsm coton</span></div>
+          <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Maroc</span></div>
+          <div class="stat"><span class="stat-num">2</span><span class="stat-label">Couleurs</span></div>
+        </div>
+      </div>
+      <div class="about-image">
+        <img src="images/about-bg.jpg" alt="LMAJHOL" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT / FOOTER -->
+  <footer id="contact" class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">LMAJHOL</div>
+        <p class="footer-tagline">Oversized Essentials<br>Casablanca, Maroc</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <a href="#collection">Collection</a>
+          <a href="#about">À Propos</a>
+        </div>
+        <div class="footer-col">
+          <h4>Infos</h4>
+          <a href="#" onclick="openPolicy(event)">Politique de retour</a>
+          <a href="#" onclick="openPolicy(event)">Livraison</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="https://instagram.com/lmajhol" target="_blank">Instagram</a>
+          <a href="mailto:contact@lmajhol.ma">Email</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 LMAJHOL. Tous droits réservés.</span>
+      <span class="footer-credit">Casablanca, Maroc</span>
+    </div>
+  </footer>
+
+  <!-- PRODUCT MODAL -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose" aria-label="Fermer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="modal-body">
+        <div class="modal-image">
+          <img id="modalImg" src="" alt="">
+        </div>
+        <div class="modal-info">
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <p class="modal-price" id="modalPrice"></p>
+          <p class="modal-desc" id="modalDesc"></p>
+          <ul class="modal-details" id="modalDetails"></ul>
+          
+          <!-- ORDER FORM -->
+          <form id="orderForm" class="order-form">
+            <input type="hidden" id="orderProduct" name="product">
+            <input type="hidden" id="orderSize" name="size">
+            
+            <div class="form-group">
+              <label for="orderName">Nom complet *</label>
+              <input type="text" id="orderName" name="name" required placeholder="Votre nom">
+            </div>
+            <div class="form-group">
+              <label for="orderPhone">Téléphone *</label>
+              <input type="tel" id="orderPhone" name="phone" required placeholder="+212 6XX XXX XXX" dir="ltr">
+            </div>
+            <div class="form-group">
+              <label for="orderCity">Ville *</label>
+              <input type="text" id="orderCity" name="city" required placeholder="Casablanca">
+            </div>
+            <div class="form-group">
+              <label for="orderAddress">Adresse de livraison *</label>
+              <textarea id="orderAddress" name="address" required placeholder="Adresse complète" rows="2"></textarea>
+            </div>
+            <div class="form-group size-selector" id="sizeSelector">
+              <label>Taille *</label>
+              <div class="size-options" id="sizeOptions"></div>
+            </div>
+            <button type="submit" class="btn-order" id="btnOrder">
+              <span>Commander — Paiement à la livraison</span>
+            </button>
+            <p class="form-note">Paiement à la livraison · Livraison sous 2-4 jours</p>
+          </form>
+          
+          <!-- SUCCESS STATE -->
+          <div class="order-success" id="orderSuccess" style="display:none">
+            <div class="success-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3>Commande envoyée !</h3>
+            <p>Nous vous contacterons bientôt pour confirmer votre commande.</p>
+            <button type="button" class="btn-back" onclick="closeModal()">Retour</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POLICY MODAL -->
+  <div class="modal-overlay" id="policyModal">
+    <div class="modal modal-policy">
+      <button class="modal-close" onclick="document.getElementById('policyModal').classList.remove('active')" aria-label="Fermer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="policy-content">
+        <h3>Livraison & Retours</h3>
+        <p><strong>Livraison :</strong> 2-4 jours ouvrables partout au Maroc. Frais de livraison : 30 MAD.</p>
+        <p><strong>Paiement :</strong> Paiement à la livraison uniquement.</p>
+        <p><strong>Retours :</strong> Retour gratuit sous 7 jours. Le produit doit être dans son état d'origine, non porté et avec son emballage.</p>
+        <p><strong>Échange :</strong> Échange possible sous 14 jours pour une autre taille.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

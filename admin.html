@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMAJHOL — Administration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@200;300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0a0a0a; --bg-card: #111; --bg-elevated: #161616;
+      --text: #fafafa; --text-muted: #888; --text-dim: #555;
+      --border: rgba(255,255,255,0.08); --accent: #fff;
+      --radius: 2px; --font-display: 'Syne', sans-serif;
+      --font-body: 'Outfit', sans-serif; --font-mono: 'Space Mono', monospace;
+    }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100dvh; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: inherit; }
+    input, textarea, select { font-family: inherit; }
+
+    /* LOGIN */
+    .login-screen {
+      min-height: 100dvh; display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+    }
+    .login-box {
+      width: 100%; max-width: 400px; text-align: center;
+    }
+    .login-logo { font-family: var(--font-display); font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.03em; }
+    .login-sub { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 2.5rem; }
+    .login-box input {
+      width: 100%; padding: 1rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      color: var(--text); font-size: 1rem; text-align: center; outline: none; margin-bottom: 1rem;
+    }
+    .login-box input:focus { border-color: rgba(255,255,255,0.3); }
+    .login-box input::placeholder { color: var(--text-dim); }
+    .login-btn {
+      width: 100%; padding: 1rem; background: #fff; color: #000; border: none;
+      font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.15em;
+      text-transform: uppercase; font-weight: 600;
+    }
+    .login-btn:hover { background: #ddd; }
+    .login-error { color: #ff4444; font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+
+    /* ADMIN PANEL */
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+
+    .admin-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.5rem clamp(1.5rem, 5vw, 3rem); border-bottom: 1px solid var(--border);
+    }
+    .admin-header-left { display: flex; align-items: center; gap: 1.5rem; }
+    .admin-logo { font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; }
+    .admin-badge {
+      font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.15em;
+      padding: 0.3rem 0.75rem; border: 1px solid var(--border); color: var(--text-dim);
+    }
+    .admin-actions { display: flex; gap: 1rem; align-items: center; }
+    .btn-primary {
+      padding: 0.75rem 1.5rem; background: #fff; color: #000; border: none;
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em;
+      text-transform: uppercase; font-weight: 600;
+    }
+    .btn-primary:hover { background: #ddd; }
+    .btn-secondary {
+      padding: 0.75rem 1.5rem; background: transparent; color: var(--text-muted);
+      border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em;
+    }
+    .btn-secondary:hover { border-color: #fff; color: #fff; }
+    .btn-danger {
+      padding: 0.5rem 1rem; background: transparent; color: #ff4444;
+      border: 1px solid rgba(255,68,68,0.3); font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.1em;
+    }
+    .btn-danger:hover { background: rgba(255,68,68,0.1); }
+
+    .admin-content { padding: 2rem clamp(1.5rem, 5vw, 3rem); max-width: 1200px; margin: 0 auto; }
+    .admin-section-title {
+      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.25em;
+      color: var(--text-dim); text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+
+    /* PRODUCT GRID */
+    .admin-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem; margin-bottom: 3rem;
+    }
+    .admin-product {
+      background: var(--bg-card); border: 1px solid var(--border); overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .admin-product:hover { border-color: var(--border-hover); }
+    .admin-product-img {
+      aspect-ratio: 4/5; background: #111; overflow: hidden;
+    }
+    .admin-product-img img { width: 100%; height: 100%; object-fit: cover; }
+    .admin-product-info { padding: 1rem; }
+    .admin-product-name { font-family: var(--font-display); font-weight: 600; margin-bottom: 0.25rem; }
+    .admin-product-meta {
+      font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim);
+      margin-bottom: 0.75rem;
+    }
+    .admin-product-actions { display: flex; gap: 0.5rem; }
+
+    /* ADD/EDIT FORM MODAL */
+    .form-modal {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(20px);
+      display: none; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .form-modal.active { display: flex; }
+    .form-modal-inner {
+      background: var(--bg-card); border: 1px solid var(--border);
+      width: 100%; max-width: 600px; max-height: 90dvh; overflow-y: auto; padding: 2rem;
+    }
+    .form-modal-title {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    .form-row { margin-bottom: 1rem; }
+    .form-row label {
+      display: block; font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+    .form-row input, .form-row textarea, .form-row select {
+      width: 100%; padding: 0.75rem 1rem; background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border); color: var(--text); font-size: 0.9rem;
+      outline: none;
+    }
+    .form-row input:focus, .form-row textarea:focus, .form-row select:focus {
+      border-color: rgba(255,255,255,0.3);
+    }
+    .form-row textarea { resize: vertical; min-height: 80px; }
+    .form-row select option { background: #111; }
+    .form-row-inline { display: flex; gap: 1rem; }
+    .form-row-inline .form-row { flex: 1; }
+    .form-checkbox {
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .form-checkbox input { width: auto; }
+    .form-checkbox label { margin: 0; font-size: 0.85rem; color: var(--text-muted); text-transform: none; letter-spacing: normal; }
+    .form-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
+
+    /* IMAGE UPLOAD */
+    .image-upload {
+      border: 2px dashed var(--border); padding: 2rem; text-align: center;
+      cursor: pointer; transition: border-color 0.3s; position: relative;
+    }
+    .image-upload:hover { border-color: rgba(255,255,255,0.2); }
+    .image-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .image-upload-text { font-size: 0.85rem; color: var(--text-dim); }
+    .image-upload-text span { color: var(--text-muted); }
+    .image-preview {
+      max-width: 200px; max-height: 200px; object-fit: cover; margin-top: 1rem;
+      border: 1px solid var(--border);
+    }
+
+    /* STATUS BAR */
+    .status-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
+      background: #1a1a1a; border-top: 1px solid var(--border);
+      padding: 0.75rem 1.5rem; display: none; align-items: center; justify-content: space-between;
+    }
+    .status-bar.active { display: flex; }
+    .status-bar-text { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
+    .status-bar-btn {
+      font-family: var(--font-mono); font-size: 0.65rem; padding: 0.5rem 1rem;
+      background: #fff; color: #000; border: none; font-weight: 600;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed; top: 1.5rem; right: 1.5rem; z-index: 600;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      padding: 1rem 1.5rem; font-size: 0.85rem; opacity: 0; transform: translateY(-10px);
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .admin-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+      .admin-actions { width: 100%; flex-wrap: wrap; }
+      .form-row-inline { flex-direction: column; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <div class="login-logo">LMAJHOL</div>
+      <div class="login-sub">Panneau d'administration</div>
+      <form id="loginForm">
+        <input type="password" id="loginPassword" placeholder="Mot de passe" autocomplete="off" autofocus>
+        <button type="submit" class="login-btn">Connexion</button>
+        <p class="login-error" id="loginError">Mot de passe incorrect</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div class="admin-panel" id="adminPanel">
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <a href="/" class="admin-logo">LMAJHOL</a>
+        <span class="admin-badge">ADMIN</span>
+      </div>
+      <div class="admin-actions">
+        <button class="btn-secondary" onclick="exportProducts()">Exporter JSON</button>
+        <button class="btn-secondary" onclick="importProducts()">Importer JSON</button>
+        <button class="btn-primary" onclick="openProductForm()">+ Ajouter un produit</button>
+        <button class="btn-secondary" onclick="logout()">Déconnexion</button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <h2 class="admin-section-title">Produits</h2>
+      <div class="admin-grid" id="adminGrid"></div>
+    </div>
+  </div>
+
+  <!-- ADD/EDIT PRODUCT FORM -->
+  <div class="form-modal" id="productFormModal">
+    <div class="form-modal-inner">
+      <h3 class="form-modal-title" id="formTitle">Ajouter un produit</h3>
+      <form id="productForm">
+        <input type="hidden" id="editId">
+        <div class="form-row">
+          <label>Nom du produit *</label>
+          <input type="text" id="pName" required placeholder="T-Shirt Oversize — Noir">
+        </div>
+        <div class="form-row-inline">
+          <div class="form-row">
+            <label>Prix (MAD) *</label>
+            <input type="number" id="pPrice" required placeholder="199">
+          </div>
+          <div class="form-row">
+            <label>ID unique *</label>
+            <input type="text" id="pId" required placeholder="tee-noir-002">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Description</label>
+          <textarea id="pDesc" placeholder="Description du produit..."></textarea>
+        </div>
+        <div class="form-row">
+          <label>Détails (un par ligne)</label>
+          <textarea id="pDetails" placeholder="100% Coton Premium&#10;Coupe Oversize&#10;Fabriqué au Maroc"></textarea>
+        </div>
+        <div class="form-row-inline">
+          <div class="form-row">
+            <label>Tailles (séparées par virgule)</label>
+            <input type="text" id="pSizes" placeholder="S, M, L, XL, XXL" value="S, M, L, XL, XXL">
+          </div>
+          <div class="form-row">
+            <label>Couleur</label>
+            <input type="text" id="pColor" placeholder="Noir">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Image du produit</label>
+          <div class="image-upload" id="imageUpload">
+            <input type="file" id="pImage" accept="image/*">
+            <p class="image-upload-text">Cliquez ou glissez une image ici<br><span>JPG, PNG, WebP (max 2MB)</span></p>
+          </div>
+          <img id="imagePreview" class="image-preview" style="display:none">
+        </div>
+        <div class="form-row">
+          <div class="form-checkbox">
+            <input type="checkbox" id="pInStock" checked>
+            <label for="pInStock">En stock</label>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" id="formSubmit">Ajouter</button>
+          <button type="button" class="btn-secondary" onclick="closeProductForm()">Annuler</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar" id="statusBar">
+    <span class="status-bar-text" id="statusText">Modifications non sauvegardées</span>
+    <button class="status-bar-btn" onclick="publishToSite()">Publier sur le site</button>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Hidden file input for import -->
+  <input type="file" id="importInput" accept=".json" style="display:none">
+
+  <script>
+    // ============================================================
+    // CONFIG
+    // ============================================================
+    const ADMIN_PASSWORD = 'lmajhol2025'; // Change this!
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let products = [];
+    let hasUnsavedChanges = false;
+    let currentImageData = null;
+
+    // ============================================================
+    // AUTH
+    // ============================================================
+    function checkAuth() {
+      if (sessionStorage.getItem('lmajhol_admin') === 'true') {
+        showAdmin();
+      }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const pwd = document.getElementById('loginPassword').value;
+      if (pwd === ADMIN_PASSWORD) {
+        sessionStorage.setItem('lmajhol_admin', 'true');
+        showAdmin();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('loginError').style.display = 'none';
+        }, 3000);
+      }
+    });
+
+    function showAdmin() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminPanel').classList.add('active');
+      loadProducts();
+    }
+
+    function logout() {
+      sessionStorage.removeItem('lmajhol_admin');
+      location.reload();
+    }
+
+    // ============================================================
+    // PRODUCTS CRUD
+    // ============================================================
+    function loadProducts() {
+      const stored = localStorage.getItem('lmajhol_products');
+      if (stored) {
+        try { products = JSON.parse(stored); } catch(e) { products = []; }
+      } else {
+        // Load defaults
+        fetch('data/products.json?' + Date.now())
+          .then(r => r.ok ? r.json() : [])
+          .then(data => { products = data; renderAdminGrid(); })
+          .catch(() => { products = []; });
+        return;
+      }
+      renderAdminGrid();
+    }
+
+    function saveProducts() {
+      localStorage.setItem('lmajhol_products', JSON.stringify(products));
+      hasUnsavedChanges = true;
+      document.getElementById('statusBar').classList.add('active');
+      renderAdminGrid();
+    }
+
+    function renderAdminGrid() {
+      const grid = document.getElementById('adminGrid');
+      if (!products.length) {
+        grid.innerHTML = '<p style="color:var(--text-dim);grid-column:1/-1;text-align:center;padding:4rem 0;">Aucun produit. Cliquez sur "+ Ajouter un produit" pour commencer.</p>';
+        return;
+      }
+      grid.innerHTML = products.map(p => `
+        <div class="admin-product">
+          <div class="admin-product-img">
+            <img src="${p.images[0]}" alt="${p.name}" onerror="this.style.display='none'">
+          </div>
+          <div class="admin-product-info">
+            <div class="admin-product-name">${p.name}</div>
+            <div class="admin-product-meta">${p.price} MAD · ${p.sizes ? p.sizes.join('/') : '—'} · ${p.inStock !== false ? 'En stock' : 'Rupture'}</div>
+            <div class="admin-product-actions">
+              <button class="btn-secondary" onclick="editProduct('${p.id}')">Modifier</button>
+              <button class="btn-danger" onclick="deleteProduct('${p.id}')">Supprimer</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ============================================================
+    // ADD / EDIT FORM
+    // ============================================================
+    function openProductForm(id) {
+      const modal = document.getElementById('productFormModal');
+      const form = document.getElementById('productForm');
+      form.reset();
+      document.getElementById('editId').value = '';
+      document.getElementById('imagePreview').style.display = 'none';
+      currentImageData = null;
+
+      if (id) {
+        const p = products.find(x => x.id === id);
+        if (!p) return;
+        document.getElementById('formTitle').textContent = 'Modifier le produit';
+        document.getElementById('formSubmit').textContent = 'Enregistrer';
+        document.getElementById('editId').value = p.id;
+        document.getElementById('pName').value = p.name;
+        document.getElementById('pId').value = p.id;
+        document.getElementById('pId').disabled = true;
+        document.getElementById('pPrice').value = p.price;
+        document.getElementById('pDesc').value = p.description || '';
+        document.getElementById('pDetails').value = (p.details || []).join('\n');
+        document.getElementById('pSizes').value = (p.sizes || []).join(', ');
+        document.getElementById('pColor').value = (p.colors || [])[0] || '';
+        document.getElementById('pInStock').checked = p.inStock !== false;
+        if (p.images[0]) {
+          document.getElementById('imagePreview').src = p.images[0];
+          document.getElementById('imagePreview').style.display = 'block';
+          currentImageData = p.images[0];
+        }
+      } else {
+        document.getElementById('formTitle').textContent = 'Ajouter un produit';
+        document.getElementById('formSubmit').textContent = 'Ajouter';
+        document.getElementById('pId').disabled = false;
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeProductForm() {
+      document.getElementById('productFormModal').classList.remove('active');
+    }
+
+    function editProduct(id) {
+      openProductForm(id);
+    }
+
+    function deleteProduct(id) {
+      if (!confirm('Supprimer ce produit ?')) return;
+      products = products.filter(p => p.id !== id);
+      saveProducts();
+      showToast('Produit supprimé');
+    }
+
+    // Image upload handling
+    document.getElementById('pImage').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Image trop volumineuse. Max 2MB.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        currentImageData = ev.target.result;
+        const preview = document.getElementById('imagePreview');
+        preview.src = currentImageData;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Form submission
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const editId = document.getElementById('editId').value;
+      const name = document.getElementById('pName').value.trim();
+      const id = document.getElementById('pId').value.trim();
+      const price = parseInt(document.getElementById('pPrice').value);
+      const desc = document.getElementById('pDesc').value.trim();
+      const details = document.getElementById('pDetails').value.split('\n').filter(x => x.trim());
+      const sizes = document.getElementById('pSizes').value.split(',').map(s => s.trim()).filter(Boolean);
+      const color = document.getElementById('pColor').value.trim();
+      const inStock = document.getElementById('pInStock').checked;
+
+      if (!name || !id || !price) {
+        alert('Veuillez remplir les champs obligatoires.');
+        return;
+      }
+
+      // Check duplicate ID
+      if (!editId && products.find(p => p.id === id)) {
+        alert('Cet ID existe déjà. Utilisez un ID unique.');
+        return;
+      }
+
+      const product = {
+        id: editId || id,
+        name,
+        slug: id,
+        price,
+        currency: 'MAD',
+        description: desc,
+        details,
+        sizes,
+        colors: color ? [color] : [],
+        images: currentImageData ? [currentImageData] : (editId ? products.find(p => p.id === editId)?.images || [] : []),
+        featured: false,
+        inStock,
+      };
+
+      if (editId) {
+        const idx = products.findIndex(p => p.id === editId);
+        if (idx !== -1) products[idx] = product;
+      } else {
+        products.push(product);
+      }
+
+      saveProducts();
+      closeProductForm();
+      showToast(editId ? 'Produit modifié' : 'Produit ajouté');
+    });
+
+    // ============================================================
+    // EXPORT / IMPORT / PUBLISH
+    // ============================================================
+    function exportProducts() {
+      const json = JSON.stringify(products, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'products.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Fichier exporté');
+    }
+
+    function importProducts() {
+      document.getElementById('importInput').click();
+    }
+
+    document.getElementById('importInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (Array.isArray(data)) {
+            products = data;
+            saveProducts();
+            showToast('Produits importés');
+          } else {
+            alert('Format invalide. Le fichier doit être un tableau JSON.');
+          }
+        } catch(err) {
+          alert('Erreur de lecture du fichier.');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    function publishToSite() {
+      const json = JSON.stringify(products, null, 2);
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(json).then(() => {
+        showToast('JSON copié dans le presse-papier ! Collez-le dans data/products.json sur GitHub.');
+      }).catch(() => {
+        // Fallback: show in textarea
+        const ta = document.createElement('textarea');
+        ta.value = json;
+        ta.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80vw;height:60vh;z-index:1000;background:#111;color:#fafafa;border:1px solid #333;padding:1rem;font-family:monospace;font-size:0.8rem;';
+        document.body.appendChild(ta);
+        ta.select();
+        alert('Copiez le contenu du texte et collez-le dans data/products.json');
+        ta.addEventListener('blur', () => ta.remove());
+      });
+
+      hasUnsavedChanges = false;
+      document.getElementById('statusBar').classList.remove('active');
+    }
+
+    // ============================================================
+    // TOAST
+    // ============================================================
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    checkAuth();
+
+    // Warn before leaving with unsaved changes
+    window.addEventListener('beforeunload', (e) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+  </script>
+</body>
+</html>
